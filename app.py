@@ -26,7 +26,14 @@ def hello_world():
 
 @app.route('/insert/')
 def insert():
-    kwargs = dict(request.args.items())
+    kwargs = {}
+    for k, v in request.args.items():
+        try:
+            v = int(v)
+        except Exception:
+            pass
+        kwargs[k] = v
+
     try:
         db.insert(kwargs)
         return '插入成功!'
