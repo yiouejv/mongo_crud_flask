@@ -58,6 +58,13 @@
         成功：影响的行数
         失败：错误提示        
     
+## 恢复数据: /recovery/
+    
+    通过拼接url的方式传递查询的条件
+    示例：
+        /recovery/?param1=xxx&param2=xxx
+    返回：
+        影响的行数
         
         
     

@@ -120,5 +120,28 @@ def remove():
         return str(err)
 
 
+@app.route('/recovery/')
+def recovery():
+    query = {}
+    for k, v in request.args.items():
+        try:
+            v = int(v)
+        except Exception:
+            pass
+        query[k] = v
+
+    if 'multi' in query:
+        query.pop('multi')
+
+    multi = request.args.get('multi', default='')
+    try:
+        count = db.recovery(query, multi)
+        return '成功恢复%d记录' % count
+    except QueryParamsError as err:
+        return str(err)
+    except Exception as err:
+        return str(err)
+
+
 if __name__ == '__main__':
     app.run()
