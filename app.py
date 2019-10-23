@@ -1,6 +1,6 @@
 from flask import Flask, request, url_for, redirect
 import config
-from ext.db import db, QuerySetNull, QueryParamsError
+from ext.db import db, QuerySetNull, QueryParamsError, CollectionLimitError
 import json
 
 
@@ -34,6 +34,17 @@ def insert():
             pass
         kwargs[k] = v
 
+    # 绑定数据库和集合到db对象中
+    if 'db' in kwargs and 'coll' in kwargs:
+        db_ = kwargs.pop('db')
+        coll_ = kwargs.pop('coll')
+        try:
+            db.init(db_, coll_)
+        except CollectionLimitError as err:
+            return str(err)
+        except Exception as err:
+            return str(err)
+
     try:
         db.insert(kwargs)
         return '插入成功!'
@@ -50,6 +61,18 @@ def find():
         except Exception:
             pass
         kwargs[k] = v
+
+    # 绑定数据库和集合到db对象中
+    if 'db' in kwargs and 'coll' in kwargs:
+        db_ = kwargs.pop('db')
+        coll_ = kwargs.pop('coll')
+        try:
+            db.init(db_, coll_)
+        except CollectionLimitError as err:
+            return str(err)
+        except Exception as err:
+            return str(err)
+
     datas = db.find(kwargs)
     ret = json.dumps(datas)
     return ret
@@ -57,6 +80,16 @@ def find():
 
 @app.route('/update/')
 def update():
+    # 绑定数据库和集合到db对象中
+    try:
+        db_ = request.args.get('db')
+        coll_ = request.args.get('coll')
+        db.init(db_, coll_)
+    except CollectionLimitError as err:
+        return str(err)
+    except Exception as err:
+        return str(err)
+
     query, update = {}, {}
     for arg in request.args:
         if arg[0:2] == 'q_':
@@ -74,6 +107,7 @@ def update():
             update[arg[2:]] = value
 
     multi = request.args.get('multi', default='')
+
     try:
         count = db.update(query, update, multi=multi)
         return '''
@@ -99,6 +133,16 @@ def update():
 
 @app.route('/remove/')
 def remove():
+    # 绑定数据库和集合到db对象中
+    try:
+        db_ = request.args.get('db')
+        coll_ = request.args.get('coll')
+        db.init(db_, coll_)
+    except CollectionLimitError as err:
+        return str(err)
+    except Exception as err:
+        return str(err)
+
     query = {}
     for k, v in request.args.items():
         try:
@@ -122,6 +166,16 @@ def remove():
 
 @app.route('/recovery/')
 def recovery():
+    # 绑定数据库和集合到db对象中
+    try:
+        db_ = request.args.get('db')
+        coll_ = request.args.get('coll')
+        db.init(db_, coll_)
+    except CollectionLimitError as err:
+        return str(err)
+    except Exception as err:
+        return str(err)
+
     query = {}
     for k, v in request.args.items():
         try:

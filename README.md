@@ -5,7 +5,7 @@
     通过拼接url的方式传递一条记录的字段
     
     示例：
-        /insert/?param1=xxx&param2=xxx
+        /insert/?db=mongo库名&coll=对应库下的集合&param1=xxx&param2=xxx
         
     返回：
         成功：成功插入！
@@ -16,7 +16,7 @@
     
     通过拼接url的方式传递查询的条件
     示例：
-        /find/?param1=xxx&param2=xxx
+        /find/?db=mongo库名&coll=对应库下的集合&param1=xxx&param2=xxx
     返回：
         匹配的json字串
         
@@ -24,8 +24,8 @@
 ## 更新数据: /update/
 
     示例：
-        查询param1=xxx, param2=xxx的全部记录，更新字段param1=ccc, param2=ccc
-        /update/?multi=true&q_param1=xxx&q_param2=xxx&u_param1=ccc&u_param2=ccc
+        查询jishen下的spider集合param1=xxx, param2=xxx的全部文档，更新字段param1=ccc, param2=ccc
+        /update/?db=jishen&coll=spider&multi=true&q_param1=xxx&q_param2=xxx&u_param1=ccc&u_param2=ccc
     参数: 
         multi
             true 
@@ -45,7 +45,7 @@
     
     示例：
         删除param1=xxx的全部记录
-        /remove/?multi=true&param1=xxx
+        /remove/?db=jishen&coll=spider&multi=true&param1=xxx
         
     参数: 
         multi
@@ -57,16 +57,15 @@
     返回：
         成功：影响的行数
         失败：错误提示        
+  
     
 ## 恢复数据: /recovery/
     
     通过拼接url的方式传递查询的条件
     示例：
-        /recovery/?param1=xxx&param2=xxx
+        /recovery/?db=jishen&coll=spider&param1=xxx&param2=xxx
     返回：
         影响的行数
         
-        
-    
         
 
